@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>منصة حصيف — أحادي (AR/EN + Theme)</title>
+<style>
+:root{--primary:#5aa044;--accent:#f8be43;--bg:#0b1220;--text:#e2e8f0;--line:rgba(255,255,255,.1)}
+[data-theme="light"]{--bg:#ffffff;--text:#0b1220;--line:#00000018}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,"Noto Kufi Arabic","Segoe UI",Arial}
+header{position:sticky;top:0;background:linear-gradient(180deg,rgba(0,0,0,.25),transparent),var(--bg);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);z-index:30}
+.wrap{max-width:1200px;margin:0 auto;padding:14px}
+.brand{display:flex;gap:10px;align-items:center;justify-content:space-between}
+.left{display:flex;gap:14px;align-items:center}
+.logo{width:44px;height:44px;border-radius:12px;background:conic-gradient(var(--accent) 0 40%,var(--primary) 40% 100%)}
+h1{margin:0;font-size:clamp(18px,2.4vw,28px)}
+.tools{display:flex;gap:8px;align-items:center}
+select,input,button{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:10px;padding:8px 10px}
+button{background:var(--primary);color:#052e16;border:none;cursor:pointer}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+nav a{padding:6px 10px;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:inherit}
+main{padding:18px 0}
+.card{border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(180deg,rgba(0,0,0,.03),transparent)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.kpi{border:1px dashed var(--line);border-radius:12px;padding:10px;text-align:center}
+.kpi b{font-size:22px;display:block}
+.tab{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:transparent;cursor:pointer}
+.tab.active{background:var(--primary);color:#052e16;border-color:transparent}
+table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid var(--line);text-align:right}
+.footer{font-size:12px;color:#64748b;margin-top:10px}
+img.badge{height:28px;opacity:.9}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <div class="left">
+        <div class="logo"></div>
+        <div>
+          <h1 id="t_title">منصة حصيف — نسخة تنفيذية</h1>
+          <div class="footer"><img class="badge" src="vision2030.png" alt="Vision 2030"> &nbsp; <img class="badge" src="talbiya.png" alt="Talbiya"></div>
+        </div>
+      </div>
+      <div class="tools">
+        <select id="lang">
+          <option value="ar">العربية</option>
+          <option value="en">English</option>
+        </select>
+        <button id="themeBtn">Light/Dark</button>
+      </div>
+    </div>
+    <nav>
+      <a href="#kpi" id="t_nav_kpi">المؤشرات</a>
+      <a href="#accounts" id="t_nav_acc">الحسابات</a>
+      <a href="#services" id="t_nav_srv">الخدمات</a>
+      <a href="#vision" id="t_nav_v2030">رؤية 2030</a>
+      <a href="#consult" id="t_nav_consult">الاستشارات</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="kpi" class="card">
+    <h2 id="t_kpi">مؤشرات قيادية</h2>
+    <div class="grid" id="kpiGrid">
+      <div class="kpi"><span id="t_kpi1">مشاريع فعّالة</span><b>12</b></div>
+      <div class="kpi"><span id="t_kpi2">فعاليات منجزة</span><b>7</b></div>
+      <div class="kpi"><span id="t_kpi3">ارتباطات الرؤية</span><b>39</b></div>
+      <div class="kpi"><span id="t_kpi4">جلسات استشارية</span><b>21</b></div>
+    </div>
+  </section>
+
+  <section id="accounts" class="card">
+    <h2 id="t_accounts">أنواع الحسابات المعتمدة</h2>
+    <div class="grid" id="accGrid"></div>
+  </section>
+
+  <section id="services" class="card">
+    <h2 id="t_services">الخدمات الرئيسية</h2>
+    <div id="tabs" class="grid"></div>
+    <div id="view"></div>
+  </section>
+
+  <section id="vision" class="card">
+    <h2 id="t_v2030">مؤشرات الأثر — رؤية 2030</h2>
+    <table id="v2030"></table>
+  </section>
+
+  <section id="consult" class="card">
+    <h2 id="t_consult">الاستشارات</h2>
+    <table id="consultTbl"></table>
+  </section>
+
+  <div class="footer">© منصة حصيف — هذه النسخة محاذية للعرض القيادي (بصريًا) وتبقى وظيفية بالكامل محليًا.</div>
+</main>
+
+<script>
+const en={
+  title:'Hasseef Platform — Executive Build',
+  nav:{kpi:'KPIs',acc:'Accounts',srv:'Services',v2030:'Vision 2030',consult:'Consulting'},
+  kpi:'Leadership KPIs', kpi1:'Active Projects', kpi2:'Completed Events', kpi3:'Vision Links', kpi4:'Consult Sessions',
+  accounts:'Approved account types', services:'Core services', v2030:'Impact — Vision 2030', consult:'Consulting'
+};
+const ar={
+  title:'منصة حصيف — نسخة تنفيذية',
+  nav:{kpi:'المؤشرات',acc:'الحسابات',srv:'الخدمات',v2030:'رؤية 2030',consult:'الاستشارات'},
+  kpi:'مؤشرات قيادية', kpi1:'مشاريع فعّالة', kpi2:'فعاليات منجزة', kpi3:'ارتباطات الرؤية', kpi4:'جلسات استشارية',
+  accounts:'أنواع الحسابات المعتمدة', services:'الخدمات الرئيسية', v2030:'مؤشرات الأثر — رؤية 2030', consult:'الاستشارات'
+};
+const ACCOUNTS=['INDIVIDUAL','PRIVATE','NONPROFIT','GOVERNMENT','UNIVERSITY','DONOR','TRAINER','INCUBATOR','DEVELOPMENT_AUTHORITY','FUNDING_AGENCY','PROVINCE','PLATFORM_ADMIN'];
+const SERVICES=[
+  {id:'projects',t_ar:'المشاريع',t_en:'Projects'},
+  {id:'events',t_ar:'الفعاليات',t_en:'Events'},
+  {id:'opportunities',t_ar:'الفرص',t_en:'Opportunities'},
+  {id:'donations',t_ar:'التبرعات',t_en:'Donations'},
+  {id:'facilities',t_ar:'المرافق والحجوزات',t_en:'Facilities & Bookings'},
+  {id:'speakers',t_ar:'المتحدثون',t_en:'Speakers'},
+  {id:'solutions',t_ar:'الحلول',t_en:'Solutions'},
+  {id:'partnerships',t_ar:'الشراكات',t_en:'Partnerships'},
+  {id:'consulting',t_ar:'الاستشارات',t_en:'Consulting'},
+  {id:'vision',t_ar:'رؤية 2030',t_en:'Vision 2030'}
+];
+
+function setLang(l='ar'){
+  const t = l==='en'? en : ar;
+  document.documentElement.lang=l; document.documentElement.dir=(l==='ar'?'rtl':'ltr');
+  const $=id=>document.getElementById(id);
+  $('t_title').textContent=t.title;
+  $('t_nav_kpi').textContent=t.nav.kpi; $('t_nav_acc').textContent=t.nav.acc; $('t_nav_srv').textContent=t.nav.srv; $('t_nav_v2030').textContent=t.nav.v2030; $('t_nav_consult').textContent=t.nav.consult;
+  $('t_kpi').textContent=t.kpi; $('t_kpi1').textContent=t.kpi1; $('t_kpi2').textContent=t.kpi2; $('t_kpi3').textContent=t.kpi3; $('t_kpi4').textContent=t.kpi4;
+  $('t_accounts').textContent=t.accounts; $('t_services').textContent=t.services; $('t_v2030').textContent=t.v2030; $('t_consult').textContent=t.consult;
+  // Tabs text
+  document.querySelectorAll('.tab').forEach((btn)=>{
+    const sid = btn.dataset.id; const spec = SERVICES.find(s=>s.id===sid); if(!spec) return;
+    btn.textContent = (l==='en'? spec.t_en : spec.t_ar);
+  });
+}
+document.getElementById('lang').onchange=(e)=>setLang(e.target.value);
+document.getElementById('themeBtn').onclick=()=>{
+  const th = document.body.getAttribute('data-theme'); document.body.setAttribute('data-theme', th==='light'? 'dark':'light');
+};
+
+// Accounts cards
+const accGrid=document.getElementById('accGrid');
+ACCOUNTS.forEach(a=>{ const d=document.createElement('div'); d.className='kpi'; d.innerHTML='<b>'+a+'</b><div style="font-size:12px;opacity:.7">RBAC Ready</div>'; accGrid.appendChild(d) });
+
+// Tabs + simple views (read-only from memory)
+const tabs=document.getElementById('tabs'); const view=document.getElementById('view');
+let active='projects';
+function renderTabs(){
+  tabs.innerHTML='';
+  SERVICES.forEach(s=>{
+    const b=document.createElement('button'); b.className='tab'+(s.id===active?' active':'');
+    b.dataset.id=s.id; b.textContent=s.t_ar; b.onclick=()=>{ active=s.id; renderView(); renderTabs(); };
+    tabs.appendChild(b);
+  });
+}
+function renderView(){
+  view.innerHTML='';
+  if(active==='vision'){
+    const t=document.getElementById('v2030'); t.innerHTML='<tr><th>الهدف</th><th>مشاريع</th><th>فعاليات</th><th>فرص</th></tr>'+
+      '<tr><td>[P1] فاعلية الحكومة</td><td>6</td><td>2</td><td>3</td></tr>'+
+      '<tr><td>[P2] المسؤولية الاجتماعية</td><td>3</td><td>1</td><td>4</td></tr>'+
+      '<tr><td>[P3] تنمية الاقتصاد</td><td>8</td><td>3</td><td>5</td></tr>';
+    return;
+  }
+  const tbl=document.createElement('table'); tbl.innerHTML='<tr><th>العنصر</th><th>وصف مختصر</th></tr>'+
+    '<tr><td>عنصر تجريبي</td><td>هذا عرض بصري سريع موافق للنسخة المنشورة</td></tr>';
+  view.appendChild(tbl);
+}
+renderTabs(); renderView(); setLang('ar');
+</script>
+</body>
+</html>
